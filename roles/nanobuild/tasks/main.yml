@@ -1,0 +1,43 @@
+---
+- name: install packages
+  pkgng: name={{ item }} state=present
+  with_items:
+  - svnup
+  - screen
+
+- name: Setup data zpool
+  zpool:
+    name: "tank"
+    devices: "ada0p4"
+    raid_mode: "detect"
+
+- name: Set data zpool options
+  zfs:
+    name="tank"
+    state=present
+    atime=off
+    checksum=fletcher4
+
+- name: build ZFS file system
+  zfs:
+    name="tank/FreeBSD"
+    state=present
+    mountpoint=/FreeBSD
+
+- name: ensure src dirs
+  file: path=/FreeBSD/release9 state=directory
+
+- name: ensure src dirs
+  file: path=/FreeBSD/release9/src state=directory
+
+- name: ensure src dirs
+  file: path=/FreeBSD/release10 state=directory
+
+- name: ensure src dirs
+  file: path=/FreeBSD/release10/src state=directory
+
+- name: Configure svnup
+  copy: src=svnup.conf dest=/usr/local/etc/svnup.conf
+
+- name: Configure ploybsd build
+  copy: src=ploybsd.conf dest=/FreeBSD/
