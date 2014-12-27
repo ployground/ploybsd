@@ -26,22 +26,12 @@
     state: present
     mountpoint: /FreeBSD
 
-- name: ensure src dirs
-  file:
-    path: /FreeBSD/release9
-    state: directory
-
-- name: ensure src dirs
-  file:
-    path: /FreeBSD/release9/src
-    state: directory
-
-- name: ensure src dirs
+- name: ensure src dir
   file:
     path: /FreeBSD/release10
     state: directory
 
-- name: ensure src dirs
+- name: ensure src dir
   file:
     path: /FreeBSD/release10/src
     state: directory
@@ -51,7 +41,12 @@
     src: svnup.conf
     dest: /usr/local/etc/svnup.conf
 
+- name: mount installation files from mfsBSD image
+  command: mount_cd9660 /dev/iso9660/MFSBSD /media/cdrom
+  args:
+    creates: /media/cdrom/mfsroot.gz
+
 - name: Configure ploybsd build
   copy:
-    src: ploybsd.conf
-    dest: /FreeBSD/
+    src: binary.conf
+    dest: /FreeBSD/ploybsd.conf
