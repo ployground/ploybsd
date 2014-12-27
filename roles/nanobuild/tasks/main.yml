@@ -41,6 +41,11 @@
     src: svnup.conf
     dest: /usr/local/etc/svnup.conf
 
+- name: ensure mount dir
+  file:
+    path: /media/cdrom
+    state: directory
+
 - name: mount installation files from mfsBSD image
   command: mount_cd9660 /dev/iso9660/MFSBSD /media/cdrom
   args:
